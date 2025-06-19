@@ -53,7 +53,6 @@ pub(crate) use unraw_re_pattern::*;
 pub(crate) use unsafe_markup_use::*;
 pub(crate) use unused_async::*;
 pub(crate) use unused_noqa::*;
-pub(crate) use unwrap_inheritance::*;
 pub(crate) use unused_unpacked_variable::*;
 pub(crate) use used_dummy_variable::*;
 pub(crate) use useless_if_else::*;

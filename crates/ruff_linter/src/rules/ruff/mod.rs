@@ -525,19 +525,4 @@ mod tests {
         assert_messages!(snapshot, diagnostics);
         Ok(())
     }
-
-    #[test]
-    fn unwrap_inheritance() -> Result<()> {
-        let diagnostics = test_path(
-            Path::new("ruff/RUF062.py"),
-            &LinterSettings {
-                ruff: super::settings::Settings {
-                    unwrap_inheritance_modules: vec!["RUF062".to_string()],
-                },
-                ..LinterSettings::for_rule(Rule::UnwrapInheritance)
-            },
-        )?;
-        assert_messages!(diagnostics);
-        Ok(())
-    }
 }

@@ -1,12 +1,5 @@
-from .configuration_glm import GlmConfig
-
-
-class LlamaAttention:
-    def __init__(self, config: GlmConfig, layer_idx: int | None = None):
-        self.o_proj = config.hidden_size
-
-    def forward(self, x):
-        return x
+from transformers.models.glm.configuration_glm import GlmConfig
+from transforemrs.models.llama.modeling_llama import LlamaAttention
 
 
 class GlmAttention(LlamaAttention):
