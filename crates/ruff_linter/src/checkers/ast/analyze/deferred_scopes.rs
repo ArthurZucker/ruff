@@ -26,6 +26,7 @@ pub(crate) fn deferred_scopes(checker: &Checker) {
         Rule::InvalidFirstArgumentNameForMethod,
         Rule::MutableClassDefault,
         Rule::MutableDataclassDefault,
+        Rule::UnwrapInheritance,
         Rule::NoSelfUse,
         Rule::RedefinedArgumentFromLocal,
         Rule::RedefinedWhileUnused,
@@ -385,6 +386,9 @@ pub(crate) fn deferred_scopes(checker: &Checker) {
             }
             if checker.enabled(Rule::MutableDataclassDefault) {
                 ruff::rules::mutable_dataclass_default(checker, class_def);
+            }
+            if checker.enabled(Rule::UnwrapInheritance) {
+                ruff::rules::unwrap_inheritance(checker, class_def);
             }
         }
 

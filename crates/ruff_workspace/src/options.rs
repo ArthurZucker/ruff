@@ -3403,6 +3403,14 @@ pub struct RuffOptions {
     )]
     pub parenthesize_tuple_in_subscript: Option<bool>,
 
+    /// List of module prefixes whose classes should be unwrapped when inheriting.
+    #[option(
+        default = "[]",
+        value_type = "list[str]",
+        example = "unwrap-inheritance-modules = ['transformers.model']"
+    )]
+    pub unwrap_inheritance_modules: Option<Vec<String>>,
+
     /// A list of additional callable names that behave like
     /// [`markupsafe.Markup`](https://markupsafe.palletsprojects.com/en/stable/escaping/#markupsafe.Markup).
     ///
@@ -3461,6 +3469,9 @@ impl RuffOptions {
         ruff::settings::Settings {
             parenthesize_tuple_in_subscript: self
                 .parenthesize_tuple_in_subscript
+                .unwrap_or_default(),
+            unwrap_inheritance_modules: self
+                .unwrap_inheritance_modules
                 .unwrap_or_default(),
         }
     }
