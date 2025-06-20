@@ -16,6 +16,7 @@ mod tests {
     use crate::test::test_path;
 
     #[test_case(Rule::ExplicitRelativeImport, Path::new("RUF063.py"))]
+    #[test_case(Rule::ClassNamePrefix, Path::new("modular_RUF064.py"))]
     fn rules(rule_code: Rule, path: &Path) -> Result<()> {
         let snapshot = format!("{}_{}", rule_code.noqa_code(), path.to_string_lossy());
         let diagnostics = test_path(Path::new("ruff").join(path).as_path(), &LinterSettings::for_rule(rule_code))?;

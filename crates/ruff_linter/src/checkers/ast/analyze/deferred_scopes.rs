@@ -390,6 +390,9 @@ pub(crate) fn deferred_scopes(checker: &Checker) {
             if checker.enabled(Rule::UnwrapInheritance) {
                 transformers::rules::unwrap_inheritance(checker, class_def);
             }
+            if checker.enabled(Rule::ClassNamePrefix) {
+                transformers::rules::class_name_prefix(checker, class_def);
+            }
         }
 
         if matches!(scope.kind, ScopeKind::Function(_) | ScopeKind::Lambda(_)) {
