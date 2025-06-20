@@ -1,6 +1,7 @@
 use rustc_hash::FxHashSet;
 use ruff_macros::{derive_message_formats, ViolationMetadata};
 use ruff_python_ast::{self as ast, helpers::is_docstring_stmt, whitespace::indentation, whitespace::trailing_lines_end, Stmt, StmtClassDef, StmtImportFrom};
+use log::debug;
 use ruff_python_codegen::{Generator, Stylist};
 use ruff_python_parser::parse_module;
 use ruff_python_trivia::textwrap::indent;

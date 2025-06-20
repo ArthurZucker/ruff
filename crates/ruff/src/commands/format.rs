@@ -152,6 +152,7 @@ pub(crate) fn format(
                                 mode,
                                 cli.range,
                                 cache,
+                                cli.output_file.as_deref(),
                             )
                         }) {
                             Ok(inner) => inner.map(|result| FormatPathResult {
@@ -246,6 +247,7 @@ pub(crate) fn format_path(
     mode: FormatMode,
     range: Option<FormatRange>,
     cache: Option<&Cache>,
+    output_path: Option<&Path>,
 ) -> Result<FormatResult, FormatCommandError> {
     if let Some(cache) = cache {
         let relative_path = cache
@@ -277,17 +279,18 @@ pub(crate) fn format_path(
     {
         FormattedSource::Formatted(formatted) => match mode {
             FormatMode::Write => {
-                let mut writer = File::create(path).map_err(|err| {
-                    FormatCommandError::Write(Some(path.to_path_buf()), err.into())
+                let out_path = output_path.unwrap_or(path);
+                let mut writer = File::create(out_path).map_err(|err| {
+                    FormatCommandError::Write(Some(out_path.to_path_buf()), err.into())
                 })?;
                 formatted
                     .write(&mut writer)
-                    .map_err(|err| FormatCommandError::Write(Some(path.to_path_buf()), err))?;
+                    .map_err(|err| FormatCommandError::Write(Some(out_path.to_path_buf()), err))?;
 
                 if let Some(cache) = cache {
-                    if let Ok(cache_key) = FileCacheKey::from_path(path) {
+                    if let Ok(cache_key) = FileCacheKey::from_path(out_path) {
                         let relative_path = cache
-                            .relative_path(path)
+                            .relative_path(out_path)
                             .expect("wrong package cache for file");
                         cache.set_formatted(relative_path.to_path_buf(), &cache_key);
                     }

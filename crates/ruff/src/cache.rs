@@ -1110,6 +1110,7 @@ mod tests {
                 FormatMode::Write,
                 None,
                 Some(cache),
+                None,
             )
         }
     }
