@@ -534,6 +534,10 @@ pub struct FormatCommand {
     /// Exit with a non-zero status code if any files were modified via format, even if all files were formatted successfully.
     #[arg(long, help_heading = "Miscellaneous", alias = "exit-non-zero-on-fix")]
     pub exit_non_zero_on_format: bool,
+
+    /// Write the formatted contents to this file instead of modifying the input file.
+    #[arg(long, help_heading = "Miscellaneous")]
+    pub output_file: Option<PathBuf>,
 }
 
 #[derive(Copy, Clone, Debug, clap::Parser)]
@@ -770,6 +774,7 @@ impl FormatCommand {
             stdin_filename: self.stdin_filename,
             range: self.range,
             exit_non_zero_on_format: self.exit_non_zero_on_format,
+            output_file: self.output_file,
         };
 
         let cli_overrides = ExplicitConfigOverrides {
@@ -1059,6 +1064,7 @@ pub struct FormatArguments {
     pub stdin_filename: Option<PathBuf>,
     pub range: Option<FormatRange>,
     pub exit_non_zero_on_format: bool,
+    pub output_file: Option<PathBuf>,
 }
 
 /// A text range specified by line and column numbers.

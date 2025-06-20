@@ -56,4 +56,5 @@ pub mod pylint;
 pub mod pyupgrade;
 pub mod refurb;
 pub mod ruff;
+pub mod transformers;
 pub mod tryceratops;
