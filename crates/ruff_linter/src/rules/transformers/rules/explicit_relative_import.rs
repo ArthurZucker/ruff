@@ -4,6 +4,7 @@ use ruff_text_size::{Ranged, TextRange};
 
 use crate::checkers::ast::Checker;
 use crate::{Edit, Fix, FixAvailability, Violation};
+use log::debug;
 
 #[derive(ViolationMetadata)]
 pub(crate) struct ExplicitRelativeImport;
@@ -33,6 +34,12 @@ pub(crate) fn explicit_relative_import(checker: &Checker, stmt: &Stmt, import: &
     } else {
         stem.to_string()
     };
+
+    debug!(
+        "Resolving relative import in {} to module {}",
+        checker.path().display(),
+        module_name
+    );
 
     let node = ast::StmtImportFrom {
         module: Some(Identifier::new(module_name.clone(), TextRange::default())),

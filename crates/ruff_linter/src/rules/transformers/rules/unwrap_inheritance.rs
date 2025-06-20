@@ -1,6 +1,7 @@
 use rustc_hash::FxHashSet;
 use ruff_macros::{derive_message_formats, ViolationMetadata};
 use ruff_python_ast::{self as ast, helpers::is_docstring_stmt, whitespace::indentation, whitespace::trailing_lines_end, Stmt, StmtClassDef, StmtImportFrom};
+use log::debug;
 use ruff_python_codegen::{Generator, Stylist};
 use ruff_python_parser::parse_module;
 use ruff_python_trivia::textwrap::indent;
@@ -234,6 +235,7 @@ pub(crate) fn unwrap_import_from(checker: &Checker, stmt: &Stmt, import: &StmtIm
         }
         let name = alias.asname.as_ref().unwrap_or(&alias.name).as_str();
         let path = resolve_module_path(checker.path(), import.level as usize, Some(module));
+        debug!("Loading definition for {} from {:?}", alias.name.as_str(), path);
         if let Some(to_name) = to_name.as_deref() {
             if let Some(content) = load_statement_source(&path, alias.name.as_str(), Some(from_name), Some(to_name), checker.stylist()) {
                 edits.push(Edit::insertion(format!("{}{}", checker.stylist().line_ending(), content), stmt.end()));
