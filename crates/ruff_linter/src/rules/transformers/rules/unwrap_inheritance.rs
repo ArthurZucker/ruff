@@ -113,18 +113,18 @@ pub(crate) fn unwrap_inheritance(checker: &Checker, class_def: &StmtClassDef) {
                                     content.push_str(line_ending);
                                 }
                             }
-                            if !content.is_empty() {
-                                let indent_str = indentation(class_def.start(), checker.source())
-                                    .unwrap_or("");
-                                let indent_str = format!("{indent_str}{}", checker.stylist().indentation());
-                                let content = indent(&content, &indent_str);
-                                let at = if let Some(last) = class_def.body.last() {
-                                    trailing_lines_end(last, checker.source())
-                                } else {
-                                    class_def.end()
-                                };
-                                edits.push(Edit::insertion(content.into_owned(), at));
-                            }
+                            // if !content.is_empty() {
+                            //     let indent_str = indentation(class_def.start(), checker.source())
+                            //         .unwrap_or("");
+                            //     let indent_str = format!("{indent_str}{}", checker.stylist().indentation().as_str());
+                            //     let content = indent(&content, &indent_str);
+                            //     let at = if let Some(last) = class_def.body.last() {
+                            //         trailing_lines_end(last, checker.source())
+                            //     } else {
+                            //         class_def.end()
+                            //     };
+                            //     edits.push(Edit::insertion(content.into_owned(), at));
+                            // }
                         }
                     }
                 }
@@ -187,16 +187,17 @@ fn load_statement_source(
         match &stmt {
             Stmt::ClassDef(ast::StmtClassDef { name: ident, .. })
             | Stmt::FunctionDef(ast::StmtFunctionDef { name: ident, .. })
-            | Stmt::AsyncFunctionDef(ast::StmtAsyncFunctionDef { name: ident, .. }) => {
-                if ident.as_str() == name {
-                    let mut content = generator.stmt(&stmt);
-                    if let (Some(from), Some(to)) = (rename_from, rename_to) {
-                        content = rename_modeling(&content, from, to);
-                    }
-                    return Some(content);
+                if ident == name =>
+            {
+                let mut result = generator.stmt(&stmt);
+
+                if let (Some(from), Some(to)) = (rename_from, rename_to) {
+                    result = result.replace(from, to);
                 }
+
+                return Some(result);
             }
-            _ => {}
+            _ => continue,
         }
     }
     None
@@ -235,13 +236,12 @@ pub(crate) fn unwrap_import_from(checker: &Checker, stmt: &Stmt, import: &StmtIm
         }
         let name = alias.asname.as_ref().unwrap_or(&alias.name).as_str();
         let path = resolve_module_path(checker.path(), import.level as usize, Some(module));
-        debug!("Loading definition for {} from {:?}", alias.name.as_str(), path);
         if let Some(to_name) = to_name.as_deref() {
             if let Some(content) = load_statement_source(&path, alias.name.as_str(), Some(from_name), Some(to_name), checker.stylist()) {
-                edits.push(Edit::insertion(format!("{}{}", checker.stylist().line_ending(), content), stmt.end()));
+                edits.push(Edit::insertion(format!("{}{}", checker.stylist().line_ending().as_str(), content), stmt.end()));
             }
         } else if let Some(content) = load_statement_source(&path, alias.name.as_str(), None, None, checker.stylist()) {
-            edits.push(Edit::insertion(format!("{}{}", checker.stylist().line_ending(), content), stmt.end()));
+            edits.push(Edit::insertion(format!("{}{}", checker.stylist().line_ending().as_str(), content), stmt.end()));
         }
         names.push(name);
     }

@@ -11,7 +11,7 @@ use crate::rules::{
     flake8_builtins, flake8_debugger, flake8_django, flake8_errmsg, flake8_import_conventions,
     flake8_pie, flake8_pyi, flake8_pytest_style, flake8_raise, flake8_return, flake8_simplify,
     flake8_slots, flake8_tidy_imports, flake8_type_checking, mccabe, pandas_vet, pep8_naming,
-    perflint, pycodestyle, pyflakes, pygrep_hooks, pylint, pyupgrade, refurb, ruff, tryceratops,
+    perflint, pycodestyle, pyflakes, pygrep_hooks, pylint, pyupgrade, refurb, ruff, tryceratops, transformers
 };
 use ruff_python_ast::PythonVersion;
 
@@ -954,10 +954,10 @@ pub(crate) fn statement(stmt: &Stmt, checker: &mut Checker) {
                 flake8_pyi::rules::bytestring_import(checker, import_from);
             }
             if checker.enabled(Rule::ExplicitRelativeImport) {
-                ruff::rules::transformers::rules::explicit_relative_import(checker, stmt, import_from);
+                transformers::rules::explicit_relative_import(checker, stmt, import_from);
             }
             if checker.enabled(Rule::UnwrapInheritance) {
-                ruff::rules::transformers::rules::unwrap_import_from(checker, stmt, import_from);
+                transformers::rules::unwrap_import_from(checker, stmt, import_from);
             }
         }
         Stmt::Raise(raise @ ast::StmtRaise { exc, .. }) => {

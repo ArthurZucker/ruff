@@ -9,7 +9,7 @@ use crate::codes::Rule;
 use crate::fix;
 use crate::rules::{
     flake8_builtins, flake8_pyi, flake8_type_checking, flake8_unused_arguments, pep8_naming,
-    pyflakes, pylint, ruff,
+    pyflakes, pylint, ruff, transformers
 };
 
 /// Run lint rules over all deferred scopes in the [`SemanticModel`].
@@ -388,7 +388,7 @@ pub(crate) fn deferred_scopes(checker: &Checker) {
                 ruff::rules::mutable_dataclass_default(checker, class_def);
             }
             if checker.enabled(Rule::UnwrapInheritance) {
-                ruff::rules::unwrap_inheritance(checker, class_def);
+                transformers::rules::unwrap_inheritance(checker, class_def);
             }
         }
 
