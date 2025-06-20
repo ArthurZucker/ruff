@@ -117,7 +117,6 @@ mod unraw_re_pattern;
 mod unsafe_markup_use;
 mod unused_async;
 mod unused_noqa;
-mod unwrap_inheritance;
 mod unused_unpacked_variable;
 mod used_dummy_variable;
 mod useless_if_else;

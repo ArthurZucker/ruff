@@ -185,17 +185,8 @@ fn load_statement_source(
     for stmt in parsed.into_suite() {
         match &stmt {
             Stmt::ClassDef(ast::StmtClassDef { name: ident, .. })
-            | Stmt::FunctionDef(ast::StmtFunctionDef { name: ident, .. })
-            | Stmt::AsyncFunctionDef(ast::StmtAsyncFunctionDef { name: ident, .. }) => {
-                if ident.as_str() == name {
-                    let mut content = generator.stmt(&stmt);
-                    if let (Some(from), Some(to)) = (rename_from, rename_to) {
-                        content = rename_modeling(&content, from, to);
-                    }
-                    return Some(content);
-                }
-            }
-            _ => {}
+            Stmt::FunctionDef(ast::StmtFunctionDef { name: ident, .. })
+|           _ => {}
         }
     }
     None
