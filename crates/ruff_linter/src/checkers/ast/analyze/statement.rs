@@ -953,6 +953,12 @@ pub(crate) fn statement(stmt: &Stmt, checker: &mut Checker) {
             if checker.enabled(Rule::ByteStringUsage) {
                 flake8_pyi::rules::bytestring_import(checker, import_from);
             }
+            if checker.enabled(Rule::ExplicitRelativeImport) {
+                ruff::rules::transformers::rules::explicit_relative_import(checker, stmt, import_from);
+            }
+            if checker.enabled(Rule::UnwrapInheritance) {
+                ruff::rules::transformers::rules::unwrap_import_from(checker, stmt, import_from);
+            }
         }
         Stmt::Raise(raise @ ast::StmtRaise { exc, .. }) => {
             if checker.enabled(Rule::RaiseNotImplemented) {
